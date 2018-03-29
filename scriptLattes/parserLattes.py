@@ -489,7 +489,7 @@ class ParserLattes(HTMLParser):
 		# Informações do pesquisador (pre-cabecalho)
 		if tag=='h2':
 			if self.salvarNome:
- 				self.nomeCompleto = stripBlanks(self.item)
+				self.nomeCompleto = stripBlanks(self.item)
 				self.salvarNome = 0
 			if self.salvarBolsaProdutividade:
 				self.salvarBolsaProdutividade = 0

@@ -140,7 +140,7 @@ class qualis_extractor(object):
         urlBase = "http://qualis.capes.gov.br/webqualis/"
         acessoInicial = requests.get(urlBase+'principal.seam')
         jid = acessoInicial.cookies['JSESSIONID']
-        print 'Iniciando sessão qualis...\n ID da Sessão: ',jid
+        print ('Iniciando sessão qualis...\n ID da Sessão: ',jid)
         url1 = urlBase + "publico/pesquisaPublicaClassificacao.seam;jsessionid=" + jid + "?conversationPropagation=begin"
         req1 = urllib2.Request(url1)
         arq1 = urllib2.urlopen(req1)
@@ -181,7 +181,7 @@ class qualis_extractor(object):
         #extract all the areas
         for area in self.areas_to_extract:
             if not self.should_update_area(area):
-                print 'Qualis da area %s atualizado!' % (self.areas[area][1])
+                print ('Qualis da area %s atualizado!' % (self.areas[area][1]))
                 continue
                 
             self.areas_last_update[area] = self.dtnow
@@ -191,8 +191,8 @@ class qualis_extractor(object):
             
             arqn = urllib2.urlopen(reqn)
             data = []
-            print 'Qualis da area %s desatualizado!' % (self.areas[area][1])
-            print 'Extraindo qualis da area: %d - %s' % self.areas[area]
+            print ('Qualis da area %s desatualizado!' % (self.areas[area][1]))
+            print ('Extraindo qualis da area: %d - %s' % self.areas[area])
             while more == 1:
                 reqn = urllib2.Request(self.url2, 'AJAXREQUEST=_viewRoot&consultaPublicaClassificacaoForm=consultaPublicaClassificacaoForm&consultaPublicaClassificacaoForm%3AsomAreaAvaliacao=' + str(area) + '&consultaPublicaClassificacaoForm%3AsomEstrato=org.jboss.seam.ui.NoSelectionConverter.noSelectionValue&javax.faces.ViewState=j_id3&ajaxSingle=consultaPublicaClassificacaoForm%3AscrollerArea&consultaPublicaClassificacaoForm%3AscrollerArea=' + str(scroller) + '&AJAX%3AEVENTS_COUNT=1&')
                 
@@ -203,14 +203,14 @@ class qualis_extractor(object):
                         arqn = urllib2.urlopen(reqn)
                         break # success
                     except urllib2.URLError as err:
-                        print "Error occurried. Trying again."
+                        print ("Error occurried. Trying again.")
                         continue
                         #if not isinstance(err.reason, socket.timeout):
                         #    raise "Non timeout error occurried while loading page." # propagate non-timeout errors
                         #else: # all ntries failed 
                         #    raise err # re-raise the last timeout error
                     if i == 10:
-                        print "ja tentou 10 vezes!"
+                        print ("ja tentou 10 vezes!")
                         break
             
                 htmln = arqn.read()

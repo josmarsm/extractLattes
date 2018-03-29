@@ -28,17 +28,17 @@ import sets
 import operator
 import os
 
-from membro import *
-from compiladorDeListas import *
-from charts.grafoDeColaboracoes import *
-from charts.graficoDeBarras import *
-from charts.mapaDeGeolocalizacao import *
-from geradorDePaginasWeb import *
-from authorRank import *
-from internacionalizacao.analisadorDePublicacoes import *
-from qualis.qualis import *
-from geradorDeXML import *
-from scriptLattes.util import *
+from scriptLattes.membro import *
+from scriptLattes.compiladorDeListas import *
+from scriptLattes.charts.grafoDeColaboracoes import *
+from scriptLattes.charts.graficoDeBarras import *
+from scriptLattes.charts.mapaDeGeolocalizacao import *
+from scriptLattes.geradorDePaginasWeb import *
+from scriptLattes.authorRank import *
+from scriptLattes.internacionalizacao.analisadorDePublicacoes import *
+from scriptLattes.qualis.qualis import *
+from scriptLattes.geradorDeXML import *
+from scriptLattes.scriptLattes.util import *
 
 class Grupo:
 	compilador = None
@@ -170,9 +170,9 @@ class Grupo:
 			self.geradorDeXml.gerarXmlParaGrupo()
 
 			if self.geradorDeXml.listaErroXml:
-				print "\n\n[AVISO] Erro ao gerar XML para os lattes abaixo:"
+				print ("\n\n[AVISO] Erro ao gerar XML para os lattes abaixo:")
 				for item in self.geradorDeXml.listaErroXml:
-			 		print "- [ID Lattes: " + item + "]"
+			 		print ("- [ID Lattes: " + item + "]")
 
 	def gerarCSVdeQualisdeGrupo(self):
 		prefix = self.obterParametro('global-prefixo')+'-' if not self.obterParametro('global-prefixo')=='' else ''
@@ -216,7 +216,7 @@ class Grupo:
 			self.salvarArquivoGenerico(s, prefix+'qualisGrupal.csv')
 
 	def gerarArquivosTemporarios(self):
-		print "\n[CRIANDO ARQUIVOS TEMPORARIOS: CSV, RIS, TXT, GDF]"
+		print ("\n[CRIANDO ARQUIVOS TEMPORARIOS: CSV, RIS, TXT, GDF]")
 		
 		self.gerarRISdeMembros()
 		self.gerarCSVdeQualisdeGrupo()
@@ -341,11 +341,11 @@ class Grupo:
 	def carregarDadosCVLattes(self):
 		indice = 1
 		for membro in self.listaDeMembros:
-			print "\n[LENDO REGISTRO LATTES: " + str(indice) + "o. DA LISTA]"
+			print ("\n[LENDO REGISTRO LATTES: " + str(indice) + "o. DA LISTA]")
 			indice += 1
 			membro.carregarDadosCVLattes()
 			membro.filtrarItemsPorPeriodo()
-			print membro
+			print (membro)
 
 	def gerarMapaDeGeolocalizacao(self):
 		if self.obterParametro('mapa-mostrar_mapa_de_geolocalizacao'):
@@ -386,7 +386,7 @@ class Grupo:
 
 	def identificarQualisEmPublicacoes(self):
 		if self.obterParametro('global-identificar_publicacoes_com_qualis'):
-			print "\n[IDENTIFICANDO QUALIS EM PUBLICAÇÕES]"
+			print ("\n[IDENTIFICANDO QUALIS EM PUBLICAÇÕES]")
 			for membro in self.listaDeMembros:
 				self.qualis.analisarPublicacoes(membro, self) # Qualis - Adiciona Qualis as publicacoes dos membros
 			self.qualis.calcularTotaisDosQualis(self)
@@ -496,7 +496,7 @@ class Grupo:
 		arquivo.close()
 
 	def gerarGraficosDeBarras(self):
-		print "\n[CRIANDO GRAFICOS DE BARRAS]"
+		print ("\n[CRIANDO GRAFICOS DE BARRAS]")
 		gBarra = GraficoDeBarras(self.obterParametro('global-diretorio_de_saida'))
 
 		gBarra.criarGrafico(self.compilador.listaCompletaArtigoEmPeriodico, 'PB0', 'Numero de publicacoes')
@@ -558,9 +558,9 @@ class Grupo:
 	def gerarGrafosDeColaboracoes(self):
 		if self.obterParametro('grafo-mostrar_grafo_de_colaboracoes'):
 			self.grafosDeColaboracoes = GrafoDeColaboracoes(self, self.obterParametro('global-diretorio_de_saida'))
-		print "\n[ROTULOS]"
-		print "- "+str(self.listaDeRotulos)
-		print "- "+str(self.listaDeRotulosCores)
+		print ("\n[ROTULOS]")
+		print ("- "+str(self.listaDeRotulos))
+		print ("- "+str(self.listaDeRotulosCores))
 
 	def gerarGraficoDeProporcoes(self):
 		if self.obterParametro('relatorio-incluir_grafico_de_proporcoes_bibliograficas'):
@@ -568,7 +568,7 @@ class Grupo:
 
 	def calcularInternacionalizacao(self):
 		if self.obterParametro('relatorio-incluir_internacionalizacao'):
-			print "\n[ANALISANDO INTERNACIONALIZACAO]"
+			print ("\n[ANALISANDO INTERNACIONALIZACAO]")
 			self.analisadorDePublicacoes = AnalisadorDePublicacoes(self)
 			self.listaDePublicacoesEinternacionalizacao = self.analisadorDePublicacoes.analisarInternacionalizacaoNaCoautoria()
 			if self.analisadorDePublicacoes.listaDoiValido is not None:
@@ -580,10 +580,10 @@ class Grupo:
 
 	def imprimirMatrizesDeFrequencia(self):
 		self.compilador.imprimirMatrizesDeFrequencia()
-		print "\n[VETOR DE CO-AUTORIA]"
-		print self.vetorDeCoAutoria
-		print "\n[MATRIZ DE FREQUENCIA NORMALIZADA]"
-		print self.matrizDeFrequenciaNormalizada
+		print ("\n[VETOR DE CO-AUTORIA]")
+		print (self.vetorDeCoAutoria)
+		print ("\n[MATRIZ DE FREQUENCIA NORMALIZADA]")
+		print (self.matrizDeFrequenciaNormalizada)
 
 	def numeroDeMembros(self):
 		return len(self.listaDeMembros)
@@ -593,17 +593,17 @@ class Grupo:
 
 	def imprimirListaDeParametros(self):
 		for par in self.listaDeParametros:# .keys():
-			print "[PARAMETRO] ",par[0]," = ",par[1]
+			print ("[PARAMETRO] ",par[0]," = ",par[1])
 		print
 
 	def imprimirListaDeMembros(self):
 		for membro in self.listaDeMembros:
-			print membro
+			print (membro)
 		print
 
 	def imprimirListaDeRotulos(self):
 		for rotulo in self.listaDeRotulos:
-			print "[ROTULO] ", rotulo
+			print ("[ROTULO] ", rotulo)
 
 	def atualizarParametro(self, parametro, valor):
 		parametro = parametro.strip().lower()
@@ -613,7 +613,7 @@ class Grupo:
 			if parametro==self.listaDeParametros[i][0]:
 				self.listaDeParametros[i][1] = valor
 				return
-		print "[AVISO IMPORTANTE] Nome de parametro desconhecido: "+parametro
+		print ("[AVISO IMPORTANTE] Nome de parametro desconhecido: "+parametro)
 
 	def obterParametro(self, parametro):
 		for i in range(0,len(self.listaDeParametros)):

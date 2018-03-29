@@ -23,18 +23,25 @@
 #
 
 
-import urllib2
+
 import re
 import sets
 import datetime
 import time
 import os
 
-from parserLattes import *
-from parserLattesXML import *
+try:
+    # For Python 3.0 and later
+    from urllib.request import urlopen
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import urlopen
+
+from scriptLattes.parserLattes import *
+from scriptLattes.parserLattesXML import *
 from htmlentitydefs import name2codepoint
-from charts.geolocalizador import *
-from baixaLattes import *
+from scriptLattes.charts.geolocalizador import *
+from scriptLattes.baixaLattes import *
 
 class Membro:
 	idLattes = None # ID Lattes
@@ -180,8 +187,8 @@ class Membro:
 				if ano1.isdigit() and ano2.isdigit():
 					self.listaPeriodo.append([int(ano1), int(ano2)])
 				else:
-					print "\n[AVISO IMPORTANTE] Periodo nao válido: "+lista[i]+". (periodo desconsiderado na lista)"
-					print "[AVISO IMPORTANTE] CV Lattes: "+self.idLattes+". Membro: "+self.nomeInicial.encode('utf8')+"\n"
+					print ("\n[AVISO IMPORTANTE] Periodo nao válido: "+lista[i]+". (periodo desconsiderado na lista)")
+					print ("[AVISO IMPORTANTE] CV Lattes: "+self.idLattes+". Membro: "+self.nomeInicial.encode('utf8')+"\n")
 		
 
 	def carregarDadosCVLattes(self):
@@ -199,7 +206,7 @@ class Membro:
 
 			self.idLattes = parser.idLattes
 			self.url      = parser.url
-			print "(*) Utilizando CV armazenado no cache: "+cvPath
+			print ("(*) Utilizando CV armazenado no cache: "+cvPath)
 
 		elif '0000000000000000'==self.idLattes:
 			# se o codigo for '0000000000000000' então serao considerados dados de pessoa estrangeira - sem Lattes. 
@@ -212,14 +219,14 @@ class Membro:
 				arquivoH = open(cvPath)
 				cvLattesHTML = arquivoH.read()
 				if self.idMembro!='':
-					print "(*) Utilizando CV armazenado no cache: "+cvPath
+					print ("(*) Utilizando CV armazenado no cache: "+cvPath)
 			else:
 				cvLattesHTML = baixaCVLattes(self.idLattes)
 				if not self.diretorioCache=='':
 					file = open(cvPath, 'w')
 					file.write(cvLattesHTML)
 					file.close()
-					print " (*) O CV está sendo armazenado no Cache"
+					print (" (*) O CV está sendo armazenado no Cache")
 
 			extended_chars= u''.join(unichr(c) for c in xrange(127, 65536, 1)) # srange(r"[\0x80-\0x7FF]")
 			special_chars = ' -'''
